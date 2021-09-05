@@ -24,11 +24,14 @@ func (s *Server) Listen(port string) error {
 	if err != nil {
 		return err
 	}
+	log.Println("== listening on port", port)
 	for {
 		conn, err := listener.Accept()
 		if err != nil {
-			return err
+			log.Println(err)
+			continue
 		}
+		log.Println("== accepted connection from", conn.RemoteAddr().Network())
 		h := NewHandler(conn, s.registered)
 		go h.Handle()
 	}
