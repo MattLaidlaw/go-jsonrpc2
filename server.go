@@ -162,10 +162,17 @@ func (h *Handler) execute(req *Request) Response {
 		params[i] = reflect.ValueOf(req.Params[i])
 	}
 
-	result := method.Call(params)
-	return Response{
-		Version: JsonrpcVersion,
-		Result:  result,
-		Id:      req.Id,
+	resultArr := method.Call(params)
+	if len(resultArr) != 0 {
+		return Response {
+			Version: JsonrpcVersion,
+			Result:  resultArr[0].Interface(),
+			Id:      req.Id,
+		}
+	} else {
+		return Response {
+			Version: JsonrpcVersion,
+			Id:      req.Id,
+		}
 	}
 }
