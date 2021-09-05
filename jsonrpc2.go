@@ -1,5 +1,5 @@
 // Package jsonrpc2 implements the JSON-RPC 2.0 specification
-package go_jsonrpc2
+package jsonrpc2
 
 const JsonrpcVersion string = "2.0"
 

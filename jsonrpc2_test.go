@@ -1,4 +1,4 @@
-package go_jsonrpc2
+package jsonrpc2
 
 import (
 	"github.com/MattLaidlaw/go-assert"
