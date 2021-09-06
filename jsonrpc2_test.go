@@ -11,9 +11,13 @@ type Class struct {}
 
 func (c *Class) Method() {}
 
-func (c *Class) ArgMethod(n float64) float64 {
-	x := 42 + n
-	return x
+func (c *Class) ArgMethod(n float64, s string, b bool) {
+	number := n
+	str := s
+	truth := b
+	_ = number
+	_ = str
+	_ = truth
 }
 
 func (c *Class) ReturnFloat64() float64 {
@@ -41,15 +45,15 @@ func TestHandler_ValidRequest(t *testing.T) {
 	assert.ExpectEq(res.Id != "", true, t)
 }
 
-func TestHandler_Args(t *testing.T) {
+func TestHandler_ArgMethod(t *testing.T) {
 	client, err := Dial("localhost:6342")
 	assert.ExpectEq(err, nil, t)
 
-	res, err := client.Call("Class.ArgMethod", 42)
+	res, err := client.Call("Class.ArgMethod", 42, "42", true)
 	assert.ExpectEq(err, nil, t)
 	assert.ExpectEq(res.Error, Error{}, t)
 
-	assert.ExpectEq(res.Result, float64(84), t)
+	assert.ExpectEq(res.Result, nil, t)
 	assert.ExpectEq(res.Version, JsonrpcVersion, t)
 	assert.ExpectEq(res.Id != "", true, t)
 }
