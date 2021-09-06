@@ -80,9 +80,7 @@ func (h *Handler) Handle() {
 				Error:   resErr,
 			}
 			_ = encoder.Encode(resData)
-			if err != nil {
-				log.Println(err)
-			}
+			break
 		}
 
 		res := h.execute(&req)
