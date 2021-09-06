@@ -31,7 +31,7 @@ func (s *Server) Listen(port string) error {
 			log.Println(err)
 			continue
 		}
-		log.Println("== accepted connection from", conn.RemoteAddr().Network())
+		log.Println("== accepted connection from", conn.RemoteAddr().String())
 		h := NewHandler(conn, s.registered)
 		go h.Handle()
 	}
