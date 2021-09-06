@@ -1,7 +1,10 @@
 # Go-JsonRPC2
-This project implements (most of) the JSON-RPC 2.0 specification for Go applications. Go-JsonRPC2 uses the [encoding/json](https://pkg.go.dev/encoding/json) package from the Go standard for marshalling and unmarshalling json data.
+This project implements (most of) the JSON-RPC 2.0 specification for Go applications. The exact format of request and response objects adheres to the specification defined [here](https://www.jsonrpc.org/specification). Go-JsonRPC2 uses the [encoding/json](https://pkg.go.dev/encoding/json) package from the Go standard for marshalling and unmarshalling json data.
 
 ## Installation
+```
+go get github.com/MattLaidlaw/go-jsonrpc2@60e3cb0bde2df6880bb1748caf67c744b5116c3d
+```
 
 ## Usage
 ### Server
@@ -28,24 +31,22 @@ func main() {
   // tell the srv instance to accept methods implemented by the Class object
   srv.Register(Class{})
   
-  // (optionally) start a goroutine before calling the blocking `Listen` method
-  go func() {
-    // block and continuously accept new Go-JsonRPC2 client connections to port 6342 (unless error returned)
-    // each connection handled on its own goroutine
-    err := srv.Listen("6342")
-    if err != nil {
-      log.Fatalln(err)
-    }    
-  }()
+  // block and continuously accept new Go-JsonRPC2 client connections to port 6342 (unless error returned)
+  // each connection handled on its own goroutine
+  err := srv.Listen("6342")
+  if err != nil {
+    log.Fatalln(err)
+  }
 
 }
 ```
 ### Client
-The Client object attempts to connect to a Go-JsonRPC2 server and makes remote procedure calls. The following example works assuming the above server implementation is running.
+The Client object connects to a Go-JsonRPC2 server and makes remote procedure calls. The following example works assuming the above server implementation is running on the same host.
 ```go
 package main
 
 import (
+  "fmt"
   "github.com/MattLaidlaw/go-jsonrpc2"  // import the jsonrpc2 package
   "log"
 )
@@ -58,17 +59,17 @@ func main() {
     log.Fatalln(err)
   }
   
-  // make the RPC to Class.Method with input argument 42
+  // make a remote procedure call to Class.Method with input argument 42
   res, err := client.Call("Class.Method", 42)
   if err != nil {
     log.Fatalln(err)
   }
   
-  log.Println(res.Result)
+  fmt.Println(res.Result)
 
 }
 ```
-We expect a result of 42, considering Class::Method(n int) returns exactly what was input. The protocol may also return an error in the case of user error or an internal server error. This can be queried from ```res.Error```.
+We expect a result of 42, considering Class::Method(n int) returns the input parameter as-is. The protocol may also return an error which can be queried from ```res.Error```.
 
 ## Limitations
 Parameters and return values of methods registered by the RPC server must be one of the following types.
@@ -76,4 +77,4 @@ Parameters and return values of methods registered by the RPC server must be one
 * string
 * bool
 
-More work has to be completed for reflecting on the parameters and return values of registered methods. When the RPC server decodes json data sent from the client, it cannot know the exact data type a number is, so it defaults to float64. This issue may not be present for all data types, but the ones shown above are the only data types that are tested. 
+In the current state of this project, all numbers encoded into json are decoded into float64 because the exact type information is lost in the encoding/decoding process. This issue may not be present for all kinds of data, but the data types shown above are the only ones tested for correctness.
