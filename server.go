@@ -20,7 +20,7 @@ func NewServer() *Server {
 }
 
 func (s *Server) Listen(port string) error {
-	listener, err := net.Listen("tcp", "localhost:" + port)
+	listener, err := net.Listen("tcp", ":" + port)
 	if err != nil {
 		return err
 	}
