@@ -3,7 +3,7 @@ This project implements (most of) the JSON-RPC 2.0 specification for Go applicat
 
 ## Installation
 ```
-go get github.com/MattLaidlaw/go-jsonrpc2@60e3cb0bde2df6880bb1748caf67c744b5116c3d
+go get github.com/MattLaidlaw/go-jsonrpc2@6443baeab6c533701731c55635a683d72f889cf9
 ```
 
 ## Usage
